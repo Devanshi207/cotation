@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global background + text for both themes */
+body {
+  @apply bg-gray-50 text-gray-900 dark:bg-slate-900 dark:text-gray-100;
+}
+
+/* ----- Infinite diagonal wave band ----- */
+@keyframes wave-scroll {
+  0%   { background-position-x: 0; }
+  100% { background-position-x: -1440px; } /* same width as the SVG */
+}
+
+.diagonal-wave {
+  /* Wave graphic encoded as an inline SVG, white by default (%23 = #) */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1440 320' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,224L60,197.3C120,171,240,117,360,117.3C480,117,600,171,720,176C840,181,960,139,1080,138.7C1200,139,1320,181,1380,202.7L1440,224L1440,320L0,320Z' fill='%23ffffff'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 1440px 320px; /* svg native size */
+  animation: wave-scroll 10s linear infinite;
+  opacity: 0.25;               /* transparency of the band */
+}
+
+
+/* Hide scrollbar or make it minimal for dark look */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+}
+::-webkit-scrollbar-thumb {
+  background: #444;
+}

@@ -14,10 +14,10 @@ const productGroupRoutes = require('./routes/productGroupRoutes');
 const productTypeRoutes  = require('./routes/productTypeRoutes');
 const projectRoutes      = require('./routes/projectRoutes');
 const unitRoutes      = require('./routes/unitRoutes');
-const quotationRoutes = require('./routes/quotationRoutes');
 const aluminiumRoutes = require('./routes/aluminiumRoutes');
 const hardwareRoutes = require('./routes/hardwareRoutes');
 const finishRoutes = require('./routes/finishRoutes');
+const quotationEditorRoutes = require('./routes/quotationEditorRoutes');
 const app = express();
 
 /* ── global middleware ────────────────────────── */
@@ -40,10 +40,10 @@ mongoose
     app.use('/api/product-types',productTypeRoutes);
     app.use('/api/projects',projectRoutes);
     app.use('/api/unit',      unitRoutes);
-    app.use('/api/quotations', quotationRoutes);
     app.use('/api/aluminium',aluminiumRoutes);
     app.use('/api/hardware',hardwareRoutes);
     app.use('/api/finish', finishRoutes);
+    app.use('/api/quotationEditor', quotationEditorRoutes);
 
 
     // health check

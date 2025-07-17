@@ -1,6 +1,7 @@
 // src/pages/Project.jsx
 import React, { useState, useEffect } from "react";
 import { Plus, Trash2, X, Pencil, Eye } from "lucide-react";
+
 import { useNavigate } from "react-router-dom";   // ← NEW
 import api from "../api";
 
@@ -142,7 +143,7 @@ export default function Project() {
   const [modal, setModal] = useState({ type: null, item: null });
   const [form, setForm] = useState(blank);
   const navigate = useNavigate();                // ← NEW
-
+  
   /* ---------- lifecycle ------------------------------------------- */
   useEffect(() => {
     api
@@ -224,7 +225,7 @@ export default function Project() {
                 "Location",
                 "Unique ID",
                 "Address",
-                "Contact",
+                "Name",
                 "Mobile",
                 "Email",
                 "Quotation",   // ← NEW
@@ -251,20 +252,32 @@ export default function Project() {
                 {/* ---------- Quotation buttons ---------- */}
                 <td className="px-4 py-2 border space-x-2 text-center">
                   <button
-                    onClick={() => addQuotation(p)}
-                    title="Add Quotation"
-                    className="p-1 bg-purple-100 text-purple-700 rounded"
+                    onClick={() =>
+                      p.quotationId
+                        ? navigate(`/quotation/${p.quotationId}`) // edit
+                        : navigate(`/quotation/add?project=${p._id}&name=${encodeURIComponent(p.contactName)}&city=${encodeURIComponent(p.location)}`)
+                    }
+                    title={p.quotationId ? "Edit Quotation" : "Add Quotation"}
+                    className={`p-1 rounded ${
+                      p.quotationId
+                        ? "bg-purple-100 text-purple-700"
+                        : "bg-green-100 text-green-700"
+                    }`}
                   >
-                    <Plus size={18} />
+                    {p.quotationId ? <Pencil size={18} /> : <Plus size={18} />}
                   </button>
+
                   <button
-                    onClick={() => viewQuotation(p)}
-                    title="View Quotations"
+                    onClick={() => navigate(`/quotation?project=${p._id}`)}
+                    title="View Quotation"
                     className="p-1 bg-indigo-100 text-indigo-700 rounded"
                   >
                     <Eye size={18} />
                   </button>
                 </td>
+
+
+
 
                 {/* ---------- Edit / Delete / View buttons ---------- */}
                 <td className="px-4 py-2 border space-x-2 text-center">
@@ -294,6 +307,7 @@ export default function Project() {
             ))}
           </tbody>
         </table>
+        
       ) : (
         <p>No projects yet.</p>
       )}

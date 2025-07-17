@@ -18,6 +18,7 @@ const aluminiumRoutes = require('./routes/aluminiumRoutes');
 const hardwareRoutes = require('./routes/hardwareRoutes');
 const finishRoutes = require('./routes/finishRoutes');
 const quotationEditorRoutes = require('./routes/quotationEditorRoutes');
+const mtoRoutes = require("./routes/mtoRoutes");
 const app = express();
 
 /* ── global middleware ────────────────────────── */
@@ -44,7 +45,7 @@ mongoose
     app.use('/api/hardware',hardwareRoutes);
     app.use('/api/finish', finishRoutes);
     app.use('/api/quotationEditor', quotationEditorRoutes);
-
+    app.use("/api/mto", require("./routes/mtoRoutes"));
 
     // health check
     app.get("/", (_req, res) => res.send("API up ✅"));

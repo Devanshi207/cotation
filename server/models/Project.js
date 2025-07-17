@@ -1,4 +1,3 @@
-// models/Project.js
 const { Schema, model } = require('mongoose');
 
 /* helper to create the same uniqueId your frontend uses */
@@ -23,8 +22,9 @@ const projectSchema = new Schema(
     contactName:    { type: String },
     contactMobile:  { type: String },
     contactEmail:   { type: String },
+    quotationId: { type: Schema.Types.ObjectId, ref: 'QuotationEditor', default: null }
   },
-  { timestamps: true }
+  { timestamps: false }
 );
 
 /* auto‑generate uniqueId before first save */

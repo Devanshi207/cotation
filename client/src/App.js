@@ -17,6 +17,7 @@ import Hardware from "./pages/Hardware";
 import QuotationEditor from "./pages/QuotationEditor";
 import QuotationPrint  from "./pages/QuotationPrint";
 import Finish from "./pages/Finish";
+import MTO from "./pages/MTO";
 
 function App() {
   return (
@@ -39,11 +40,15 @@ function App() {
         <Route path="/lock" element={<Lock />} />
         <Route path="/aluminium" element={<Aluminium />} />
         <Route path="/hardware" element={<Hardware />} />
-        <Route path="/quotation"           element={<QuotationEditor mode="list"   />} />
-        <Route path="/quotation/add"       element={<QuotationEditor mode="add"    />} />
-        <Route path="/quotation/:id/edit"  element={<QuotationEditor mode="edit"   />} />
+        <Route path="/quotation/add" element={<QuotationEditor mode="add" />} />    
+        <Route path="/quotation/:id/edit" element={<QuotationEditor mode="edit" />} />
+        <Route path="/quotation/:id/view" element={<QuotationEditor mode="view" />} />  
+        <Route path="/quotation/:id" element={<QuotationEditor mode="edit" />} />
+        <Route path="/quotation" element={<QuotationEditor mode="view" />} />
+        <Route path="/finish" element={<Finish />} />
         <Route path="/quotation/:id/print" element={<QuotationPrint />} />
         <Route path="/finish" element={<Finish />} />
+        <Route path="/mto/:id" element={<MTO />} />
       </Route>
     </Routes>
   );

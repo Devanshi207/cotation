@@ -4,7 +4,8 @@ const { Schema, model } = require('mongoose');
 const rowSchema = new Schema({
   series: String,
   typology: String,
-  interlock: String,
+  insideInterlock: String,
+  outsideInterlock: String,
   rail: String,
   finish: String,
   glass: String,
@@ -17,7 +18,7 @@ const rowSchema = new Schema({
   rateSqFt: String,
   rateSqM: String,
   rateType: String,
-  amount: String
+  amount: String,
 }, { _id: false });
 
 const quotationEditorSchema = new Schema({
@@ -31,12 +32,24 @@ const quotationEditorSchema = new Schema({
     fabrication: Number,
     installation: Number,
     fixedCharge: Number,
-    uniqueID: { type: String, required: true }
+    aluminiumRate: { type: Number, default: 300 },
+    projectId: { type: String, required: true },
+    terms: { type: String, default: "" }
   },
+  
   rows: [rowSchema],
   totalAmt: Number,
   taxAmt: Number,
-  grand: Number
+  grand: Number,
+  version: { type: Number, default: 0 },
+  parentQuotationId: { type: String, default: null },
+  isLatest: { type: Boolean, default: true }
 }, { timestamps: false });
+
+// Prevent duplicate versions per project
+quotationEditorSchema.index(
+  { "header.projectId": 1, version: 1 },
+  { unique: true }
+);
 
 module.exports = model('QuotationEditor', quotationEditorSchema);

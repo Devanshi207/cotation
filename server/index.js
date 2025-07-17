@@ -1,60 +1,47 @@
 require("dotenv").config();
-const express  = require("express");
+const express = require("express");
 const mongoose = require("mongoose");
-const cors     = require("cors");
+const cors = require("cors");
 
-const authRoutes = require("./routes/authRoutes");
-const PORT       = process.env.PORT || 5000;
-
-const productRoutes = require('./routes/productRoutes');
-const glassRoutes = require('./routes/glassRoutes');
-const hsnRoutes = require('./routes/hsnRoutes');
-const lockRoutes         = require('./routes/lockRoutes');
-const productGroupRoutes = require('./routes/productGroupRoutes');
-const productTypeRoutes  = require('./routes/productTypeRoutes');
-const projectRoutes      = require('./routes/projectRoutes');
-const unitRoutes      = require('./routes/unitRoutes');
-const aluminiumRoutes = require('./routes/aluminiumRoutes');
-const hardwareRoutes = require('./routes/hardwareRoutes');
-const finishRoutes = require('./routes/finishRoutes');
-const quotationEditorRoutes = require('./routes/quotationEditorRoutes');
-const mtoRoutes = require("./routes/mtoRoutes");
 const app = express();
 
-/* ── global middleware ────────────────────────── */
-app.use(cors());
+// ✅ Use proper CORS config
+app.use(cors({
+  origin: ["http://localhost:3000", "https://yourfrontend.com"], // replace with your frontend domain
+}));
+
 app.use(express.json());
 
-/* ── connect DB then mount routes ─────────────── */
+// ✅ Connect DB then mount routes
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log("✅  MongoDB connected");
+    console.log("✅ MongoDB connected");
 
-    // auth routes
-    app.use("/api/auth", authRoutes);
-    app.use('/api/products', productRoutes);
-    app.use('/api/glass', glassRoutes);
-    app.use('/api/hsn', hsnRoutes);
-    app.use('/api/locks',lockRoutes);
-    app.use('/api/product-groups',productGroupRoutes);
-    app.use('/api/product-types',productTypeRoutes);
-    app.use('/api/projects',projectRoutes);
-    app.use('/api/unit',      unitRoutes);
-    app.use('/api/aluminium',aluminiumRoutes);
-    app.use('/api/hardware',hardwareRoutes);
-    app.use('/api/finish', finishRoutes);
-    app.use('/api/quotationEditor', quotationEditorRoutes);
+    // ✅ All routes
+    app.use("/api/auth", require("./routes/authRoutes"));
+    app.use("/api/products", require("./routes/productRoutes"));
+    app.use("/api/glass", require("./routes/glassRoutes"));
+    app.use("/api/hsn", require("./routes/hsnRoutes"));
+    app.use("/api/locks", require("./routes/lockRoutes"));
+    app.use("/api/product-groups", require("./routes/productGroupRoutes"));
+    app.use("/api/product-types", require("./routes/productTypeRoutes"));
+    app.use("/api/projects", require("./routes/projectRoutes"));
+    app.use("/api/unit", require("./routes/unitRoutes"));
+    app.use("/api/aluminium", require("./routes/aluminiumRoutes"));
+    app.use("/api/hardware", require("./routes/hardwareRoutes"));
+    app.use("/api/finish", require("./routes/finishRoutes"));
+    app.use("/api/quotationEditor", require("./routes/quotationEditorRoutes"));
     app.use("/api/mto", require("./routes/mtoRoutes"));
 
-    // health check
-    app.get("/", (_req, res) => res.send("API up ✅"));
+    app.get("/", (_req, res) => res.send("API up ✅"));
 
+    const PORT = process.env.PORT || 5000;
     app.listen(PORT, () =>
-      console.log(`🚀  Server running on http://localhost:${PORT}`)
+      console.log(`🚀 Server running on http://localhost:${PORT}`)
     );
   })
   .catch((err) => {
-    console.error("DB connection error:", err.message);
+    console.error("❌ DB connection error:", err.message);
     process.exit(1);
   });

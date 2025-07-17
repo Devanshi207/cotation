@@ -7,7 +7,7 @@ const app = express();
 
 // ✅ Use proper CORS config
 app.use(cors({
-  origin: ["http://localhost:3000", "https://yourfrontend.com"], // replace with your frontend domain
+  origin: ["http://localhost:3000", "https://quotationn.vercel.app"]
 }));
 
 app.use(express.json());

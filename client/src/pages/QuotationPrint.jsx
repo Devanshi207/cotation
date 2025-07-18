@@ -92,6 +92,11 @@ export default function QuotationPrint() {
 
   const shortId = id.slice(-6);
   const quotationDate = q.createdAt ? new Date(q.createdAt) : new Date();
+const rowsPerPage = 10;
+const rowPages = [];
+for (let i = 0; i < q.rows.length; i += rowsPerPage) {
+  rowPages.push(q.rows.slice(i, i + rowsPerPage));
+}
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -125,18 +130,22 @@ export default function QuotationPrint() {
     page-break-after: always;
   }
 }
-
 @media print {
-  html, body {
-    margin: 0;
-    padding: 0;
+ html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  @page {
+    size: A4;
+    margin: 10mm 3mm 10mm 3mm;
   }
 
   body * {
     visibility: hidden !important;
   }
 
-  #print-section, #print-section * {
+  #print-section,
+  #print-section * {
     visibility: visible !important;
   }
 
@@ -144,49 +153,65 @@ export default function QuotationPrint() {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    margin: 0;
+    width: 190mm;
+    margin: 0 auto;
     padding: 0;
     z-index: 9999;
   }
 
   .print-page {
-    display: block;
-    width: 190mm;
-    min-height: 277mm;
-    padding: 5mm;
-    margin: 0 auto;
-    border: 2px solid black;
     background: white;
     box-sizing: border-box;
+    border: 2px solid black;
+    width: 100%;
+    min-height: 277mm; /* 297mm - 2*10mm page margin */
+    padding: 10mm;
+    margin: 0;
     page-break-after: always;
     position: relative;
+    display: flex;
+    flex-direction: column;
   }
 
-  @page {
-    size: A4;
-    margin: 0;
+  .print-page:not(:first-child) {
+    margin-top: 10mm; /* Add space at the top of subsequent pages */
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    border-bottom: 1px solid #ccc;
+  }
+
+  th, td {
+    border: 1px solid #ccc;
+    padding: 6px;
+    text-align: left;
+    page-break-inside: avoid;
+  }
+
+  .totals-wrapper,
+  .signature-block {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    gap: 2rem;
+    page-break-inside: avoid;
   }
 
   .page-break {
     page-break-before: always;
   }
-
-  .totals-wrapper,
-  .signature-block {
-    page-break-inside: avoid;
-  }
-
-  table {
-    page-break-inside: auto;
-  }
-
-  tr {
-    page-break-inside: avoid;
-    page-break-after: auto;
-  }
 }
-
         `}</style>
 
         <div className="print-page">
@@ -233,7 +258,8 @@ export default function QuotationPrint() {
           </p>
 
           {/* Table + Totals */}
-          <div className="content-wrapper">
+          {rowPages.map((rows, index) => (
+           <div className="print-page" key={index}>
             <table className="w-full text-xs border-collapse border border-gray-300 mb-6">
               <thead className="bg-gray-100">
                 <tr>
@@ -287,6 +313,7 @@ export default function QuotationPrint() {
               </table>
             </div>
           </div>
+          ))}
         </div>
 
         {/* Page Break: Terms & Signatures */}
